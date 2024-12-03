@@ -155,16 +155,17 @@ func main() {
         log.Fatalf("Error calculating differences: %v", err)
     }
 
+    // Solution for Part 1
     total := addAll(differenceList)
-    fmt.Println("Total Sum of Differences:", total)
+    fmt.Println("Total Sum of Differences (Part 1):", total)
 
     occurrences := countOccurrences(leftList, rightList)
 
     repeatMultiples := calculateRepeatMultiples(occurrences)
 
-    fmt.Println("\nRepeat Multiples List:")
+    // Solution for Part 2
     if repeatMultiples > 0 {
-        fmt.Println(repeatMultiples)
+        fmt.Println("Total Sum of Repeat Multiples (Part 2):", repeatMultiples)
     } else {
         fmt.Println("No numbers in leftList are repeated in rightList.")
     }
