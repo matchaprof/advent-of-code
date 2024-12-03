@@ -94,6 +94,37 @@ func addAll(differenceList []int) int {
     return result
 }
 
+// countOccurrences takes a leftList and rightList, and returns a map where each unique number
+// in leftList maps to the number of times it appears in rightList.
+func countOccurrences(leftList, rightList []int) map[int]int {
+    frequencyMap := make(map[int]int)
+    for _, num := range rightList {
+        frequencyMap[num]++
+    }
+
+    occurrences := make(map[int]int)
+    for _, num := range leftList {
+        if _, exists := occurrences[num]; !exists {
+            occurrences[num] = frequencyMap[num]
+        }
+    }
+
+    return occurrences
+}
+
+func calculateRepeatMultiples(occurrences map[int]int) int {
+    repeatMultiples := 0
+
+    for num, count := range occurrences {
+        if count > 0 {
+            product := num * count
+            repeatMultiples += product
+        }
+    }
+
+    return repeatMultiples
+}
+
 func main() {
     // Open the input file
     file, err := os.Open("input.txt")
@@ -119,17 +150,22 @@ func main() {
     // Sort the lists
     sortLists(leftList, rightList)
 
-    // Print the sorted lists
-    // printSortedLists(leftList, rightList)
-
-    // Calculate and print the new differenceList
     differenceList, err := calculateDifferenceList(leftList, rightList)
     if err != nil {
         log.Fatalf("Error calculating differences: %v", err)
     }
 
-    // fmt.Println("Difference List:", differenceList)
-
     total := addAll(differenceList)
     fmt.Println("Total Sum of Differences:", total)
+
+    occurrences := countOccurrences(leftList, rightList)
+
+    repeatMultiples := calculateRepeatMultiples(occurrences)
+
+    fmt.Println("\nRepeat Multiples List:")
+    if repeatMultiples > 0 {
+        fmt.Println(repeatMultiples)
+    } else {
+        fmt.Println("No numbers in leftList are repeated in rightList.")
+    }
 }
