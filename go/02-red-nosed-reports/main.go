@@ -9,7 +9,16 @@ import (
 	"strings"
 )
 
-func isSorted(list []int) bool {
+// returns the absolute value of an integer
+func absInt(x int) int {
+	if x < 0 {
+			return -x
+	}
+	return x
+}
+
+// checks if list is sorted (ascending/descending) and meets distance criteria between consecutive numbers
+func isSafe(list []int) bool {
 	ascending := true
 	descending := true
 
@@ -21,10 +30,45 @@ func isSorted(list []int) bool {
 		if list[i] > list[i-1] {
 			descending = false
 		}
+
+		distance := absInt(list[i] - list[i-1])
+    if distance < 1 || distance > 3 {
+			return false
+		}
 	}
 
 	return ascending || descending
 }
+
+// isAlmostSorted checks if the list is either perfectly sorted (ascending or descending)
+// or can be sorted by modifying at most one element.
+// func isAlmostSorted(list []int) bool {
+// 	ascendingDeviations := 0
+// 	for i := 1; i < len(list); i++ {
+// 			if list[i] <= list[i-1] {
+// 					ascendingDeviations++
+// 					if ascendingDeviations > 1 {
+// 							break
+// 					}
+// 			}
+// 	}
+
+// 	if ascendingDeviations <= 1 {
+// 			return true
+// 	}
+
+// 	descendingDeviations := 0
+// 	for i := 1; i < len(list); i++ {
+// 			if list[i] >= list[i-1] {
+// 					descendingDeviations++
+// 					if descendingDeviations > 1 {
+// 							break
+// 					}
+// 			}
+// 	}
+
+// 	return descendingDeviations <= 1
+// }
 
 func readAndSortInput(filename string) ([][]int, error) {
 	file, err := os.Open(filename)
@@ -64,12 +108,6 @@ func readAndSortInput(filename string) ([][]int, error) {
 					numbers = append(numbers, num)
 			}
 
-			 // Verify if the list is sorted (ascending or descending)
-			 if !isSorted(numbers) {
-				// log.Printf("Line %d is not sorted. Skipping line.", lineNumber) // Logs the skipped line
-				continue
-			}
-
 			// Append the parsed slice to the master slice
 			inputLists = append(inputLists, numbers)
 	}
@@ -81,25 +119,36 @@ func readAndSortInput(filename string) ([][]int, error) {
 	return inputLists, nil
 }
 
-// returns the absolute value of an integer
-func absInt(x int) int {
-	if x < 0 {
-			return -x
-	}
-	return x
-}
-
 // countSafeLists counts how many sorted lists have a maximum distance between
 // any two numbers that is not greater than 3.
-func countSafeLists(inputLists [][]int) int {
+func countSafeListsStrict(inputLists [][]int) int {
 	count := 0
 
 	for _, list := range inputLists {
-		safe := true
-		for i := 1; i < len(list); i++ {
-			distance := absInt(list[i] - list[i-1])
-			if distance < 1 || distance > 3 {
-				safe = false
+		if isSafe(list) {
+			count++
+		}
+	}
+
+	return count
+}
+
+func countSafeListsFlex(inputLists [][]int) int {
+	count := 0
+
+	for _, list := range inputLists {
+		if isSafe(list) {
+			count++
+			continue
+		}
+
+		safe :=false
+		for i := 0; i < len(list); i++ {
+			modifiedList := append([]int{}, list[:i]...)
+			modifiedList = append(modifiedList, list[i+1:]...)
+
+			if isSafe(modifiedList) {
+				safe = true
 				break
 			}
 		}
@@ -124,7 +173,10 @@ func main() {
     fmt.Printf("Processed %d lines.\n", len(inputLists))
 
 		// Solution to Part 1
-		safeListCount := countSafeLists(inputLists)
-		fmt.Println("Number of Safe Reports:", safeListCount)
+		strictSafeListCount := countSafeListsStrict(inputLists)
+		fmt.Println("Number of Safe Reports (Strict):", strictSafeListCount)
 	
+		// Solution to Part 2
+		flexSafeListCount := countSafeListsFlex(inputLists)
+		fmt.Println("Number of Safe Reports via Problem Dampener:", flexSafeListCount)
 }
