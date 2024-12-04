@@ -12,7 +12,7 @@ import (
 // returns the absolute value of an integer
 func absInt(x int) int {
 	if x < 0 {
-			return -x
+		return -x
 	}
 	return x
 }
@@ -32,7 +32,7 @@ func isSafe(list []int) bool {
 		}
 
 		distance := absInt(list[i] - list[i-1])
-    if distance < 1 || distance > 3 {
+		if distance < 1 || distance > 3 {
 			return false
 		}
 	}
@@ -43,7 +43,7 @@ func isSafe(list []int) bool {
 func readAndSortInput(filename string) ([][]int, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-			return nil, fmt.Errorf("failed to open input file: %v", err)
+		return nil, fmt.Errorf("failed to open input file: %v", err)
 	}
 	defer file.Close()
 
@@ -53,33 +53,33 @@ func readAndSortInput(filename string) ([][]int, error) {
 
 	lineNumber := 0
 	for scanner.Scan() {
-			lineNumber++
-			line := strings.TrimSpace(scanner.Text())
+		lineNumber++
+		line := strings.TrimSpace(scanner.Text())
 
-			if line == "" {
-					continue
+		if line == "" {
+			continue
+		}
+
+		fields := strings.Fields(line)
+		if len(fields) == 0 {
+			log.Printf("Line %d is empty after trimming.\n", lineNumber)
+			continue
+		}
+
+		// Convert each field to an integer
+		numbers := make([]int, 0, len(fields))
+		for _, field := range fields {
+			num, err := strconv.Atoi(field)
+			if err != nil {
+				log.Printf("Invalid number '%s' on line %d: %v\n", field, lineNumber, err)
+				continue
 			}
 
-			fields := strings.Fields(line)
-			if len(fields) == 0 {
-					log.Printf("Line %d is empty after trimming.\n", lineNumber)
-					continue
-			}
+			numbers = append(numbers, num)
+		}
 
-			// Convert each field to an integer
-			numbers := make([]int, 0, len(fields))
-			for _, field := range fields {
-					num, err := strconv.Atoi(field)
-					if err != nil {
-							log.Printf("Invalid number '%s' on line %d: %v\n", field, lineNumber, err)
-							continue
-					}
-
-					numbers = append(numbers, num)
-			}
-
-			// Append the parsed slice to the master slice
-			inputLists = append(inputLists, numbers)
+		// Append the parsed slice to the master slice
+		inputLists = append(inputLists, numbers)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -112,7 +112,7 @@ func countSafeListsFlex(inputLists [][]int) int {
 			continue
 		}
 
-		safe :=false
+		safe := false
 		for i := 0; i < len(list); i++ {
 			modifiedList := append([]int{}, list[:i]...)
 			modifiedList = append(modifiedList, list[i+1:]...)
@@ -132,21 +132,21 @@ func countSafeListsFlex(inputLists [][]int) int {
 }
 
 func main() {
-    inputFilename := "input.txt"
+	inputFilename := "input.txt"
 
-    inputLists, err := readAndSortInput(inputFilename)
-    if err != nil {
-        log.Fatalf("Error processing input: %v", err)
-    }
+	inputLists, err := readAndSortInput(inputFilename)
+	if err != nil {
+		log.Fatalf("Error processing input: %v", err)
+	}
 
-    // Output the number of processed lines
-    fmt.Printf("Processed %d lines.\n", len(inputLists))
+	// Output the number of processed lines
+	fmt.Printf("Processed %d lines.\n", len(inputLists))
 
-		// Solution to Part 1
-		strictSafeListCount := countSafeListsStrict(inputLists)
-		fmt.Println("Number of Safe Reports (Strict):", strictSafeListCount)
-	
-		// Solution to Part 2
-		flexSafeListCount := countSafeListsFlex(inputLists)
-		fmt.Println("Number of Safe Reports via Problem Dampener:", flexSafeListCount)
+	// Solution to Part 1
+	strictSafeListCount := countSafeListsStrict(inputLists)
+	fmt.Println("Number of Safe Reports (Strict):", strictSafeListCount)
+
+	// Solution to Part 2
+	flexSafeListCount := countSafeListsFlex(inputLists)
+	fmt.Println("Number of Safe Reports via Problem Dampener:", flexSafeListCount)
 }
