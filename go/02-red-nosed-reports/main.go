@@ -40,36 +40,6 @@ func isSafe(list []int) bool {
 	return ascending || descending
 }
 
-// isAlmostSorted checks if the list is either perfectly sorted (ascending or descending)
-// or can be sorted by modifying at most one element.
-// func isAlmostSorted(list []int) bool {
-// 	ascendingDeviations := 0
-// 	for i := 1; i < len(list); i++ {
-// 			if list[i] <= list[i-1] {
-// 					ascendingDeviations++
-// 					if ascendingDeviations > 1 {
-// 							break
-// 					}
-// 			}
-// 	}
-
-// 	if ascendingDeviations <= 1 {
-// 			return true
-// 	}
-
-// 	descendingDeviations := 0
-// 	for i := 1; i < len(list); i++ {
-// 			if list[i] >= list[i-1] {
-// 					descendingDeviations++
-// 					if descendingDeviations > 1 {
-// 							break
-// 					}
-// 			}
-// 	}
-
-// 	return descendingDeviations <= 1
-// }
-
 func readAndSortInput(filename string) ([][]int, error) {
 	file, err := os.Open(filename)
 	if err != nil {
