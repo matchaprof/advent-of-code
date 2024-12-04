@@ -57,12 +57,6 @@ func sortLists(leftList, rightList []int) {
 	sort.Ints(rightList)
 }
 
-// printSortedLists prints the sorted lists.
-func printSortedLists(leftList, rightList []int) {
-	fmt.Printf("First List Sorted Ascending (%d elements):\n%v\n\n", len(leftList), leftList)
-	fmt.Printf("Second List Sorted Ascending (%d elements):\n%v\n", len(rightList), rightList)
-}
-
 func absInt(x int) int {
 	if x < 0 {
         return -x
