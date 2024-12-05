@@ -60,10 +60,10 @@ func extractMulPatterns(line string, re *regexp.Regexp) []MulMatch {
 			continue
 		}
 		fullStart := match[0]
-		xStart := match[2]
-		xEnd := match[3]
-		yStart := match[4]
-		yEnd := match[5]
+		xStart := match[1]
+		xEnd := match[2]
+		yStart := match[3]
+		yEnd := match[4]
 
 		xStr := line[xStart:xEnd]
 		yStr := line[yStart:yEnd]
